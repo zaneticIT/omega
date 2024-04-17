@@ -6,7 +6,6 @@ function App() {
     <div>
       <h1>API Data</h1>
       <Ugovori />
-      <Artikli />
     </div>
   );
 }
