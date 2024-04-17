@@ -24,23 +24,10 @@ function ArtikliRows(props) {
   };
 
   return (
-    <TableBody>
+    <React.Fragment>
       {artikli ? (
         artikli.map((item, index) => (
-          <TableRow
-            key={index}
-            sx={{
-              "&:last-child td, &:last-child th": { border: 0 },
-              backgroundColor:
-                item.status === "KREIRANO"
-                  ? "#66bb6a"
-                  : item.status === "NARUČENO"
-                  ? "#ffa726"
-                  : item.status === "ISPORUČENO"
-                  ? "grey"
-                  : "",
-            }}
-          >
+          <TableRow>
             <TableCell component="th" scope="row">
               {item.naziv}
             </TableCell>
@@ -49,9 +36,9 @@ function ArtikliRows(props) {
           </TableRow>
         ))
       ) : (
-        <></>
+        <CircularProgress />
       )}
-    </TableBody>
+    </React.Fragment>
   );
 }
 

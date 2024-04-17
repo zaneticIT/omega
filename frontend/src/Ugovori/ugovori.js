@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { CircularProgress, Paper } from "@mui/material";
+import { CircularProgress, Paper, Typography, Checkbox } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import IconButton from "@mui/material/IconButton";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PropTypes from "prop-types";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import ArtikliRows from "../Artikli/artikli";
-//import Artikli from "../Artikli/artikli";
 
 function UgovoriTable() {
   const [ugovori, setUgovori] = useState(null);
@@ -35,11 +30,17 @@ function UgovoriTable() {
 
   function UgovoriRows(props) {
     const [open, setOpen] = React.useState(false);
+    const [selected, setSelected] = React.useState(false);
     const item = props.item;
     return (
       <React.Fragment>
         <TableRow
+          hover
           sx={{
+            "&:hover": {
+              backgroundColor: "blue !important",
+            },
+            "& > *": { borderBottom: "unset" },
             "&:last-child td, &:last-child th": { border: 0 },
             backgroundColor:
               item.status === "KREIRANO"
@@ -52,26 +53,24 @@ function UgovoriTable() {
           }}
         >
           <TableCell>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
+            <Checkbox size="small" color="success" />
           </TableCell>
           <TableCell align="right">{item.kupac}</TableCell>
           <TableCell align="right">{item.broj_ugovora}</TableCell>
           <TableCell align="right">{item.datum_akonotacije}</TableCell>
           <TableCell align="right">{item.rok_isporuke}</TableCell>
           <TableCell align="right">{item.status}</TableCell>
+          <TableCell align="right"></TableCell>
         </TableRow>
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }}>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Table size="small" aria-label="purchases">
                   <TableHead>
+                    <Typography sx={{ fontSize: "h4.fontSize" }}>
+                      Artikli
+                    </Typography>
                     <TableRow>
                       <TableCell>Naziv</TableCell>
                       <TableCell>Dobavljač</TableCell>
@@ -79,11 +78,7 @@ function UgovoriTable() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <ArtikliRows id={item.id} />
-                      </TableCell>
-                    </TableRow>
+                    <ArtikliRows id={item.id} />
                   </TableBody>
                 </Table>
               </Box>
@@ -105,43 +100,55 @@ function UgovoriTable() {
   };
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: ugovori ? "" : "25vh",
-        maxWidth: 0.6,
-        marginRight: "auto",
-        marginLeft: "auto",
-        boxShadow: 5,
-      }}
-    >
-      {ugovori ? (
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell align="right">Kupac</TableCell>
-              <TableCell align="right">Broj ugovora</TableCell>
-              <TableCell align="right">Datum akonotacije</TableCell>
-              <TableCell align="right">Rok isporuke</TableCell>
-              <TableCell align="right">Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {ugovori.map((item, index) => (
-              <UgovoriRows item={item} key={index} />
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <span>
-          <CircularProgress />
-        </span>
-      )}
-    </TableContainer>
+    <React.Fragment>
+      <Typography
+        sx={{
+          fontSize: "h4.fontSize",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        Kupoprodajni ugovori
+      </Typography>
+      <TableContainer
+        component={Paper}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: ugovori ? "" : "25vh",
+          maxWidth: 0.8,
+          marginRight: "auto",
+          marginLeft: "auto",
+          boxShadow: 5,
+        }}
+      >
+        {ugovori ? (
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={2}></TableCell>
+                <TableCell align="right">Kupac</TableCell>
+                <TableCell align="right">Broj ugovora</TableCell>
+                <TableCell align="right">Datum akonotacije</TableCell>
+                <TableCell align="right">Rok isporuke</TableCell>
+                <TableCell align="right">Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ugovori.map((item, index) => (
+                <UgovoriRows item={item} key={index} />
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <span>
+            <CircularProgress />
+          </span>
+        )}
+      </TableContainer>
+    </React.Fragment>
   );
 }
 export default UgovoriTable;
