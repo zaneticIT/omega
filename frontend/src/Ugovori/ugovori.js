@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import ArtikliRows from "../Artikli/artikli";
+import { styled } from "@mui/material/styles";
 
 function UgovoriTable() {
   const [ugovori, setUgovori] = useState(null);
@@ -17,6 +18,15 @@ function UgovoriTable() {
   useEffect(() => {
     fetchUgovori();
   }, []);
+
+  const CustomTableRow = styled(TableRow)(({ theme }) => ({
+    "&:hover": {
+      filter: "brightness(90%)",
+      cursor: "pointer",
+    },
+    "& > *": { borderBottom: "unset" },
+    "&:last-child td, &:last-child th": { border: 0 },
+  }));
 
   const fetchUgovori = async () => {
     try {
@@ -28,28 +38,25 @@ function UgovoriTable() {
     }
   };
 
+  function delegateColors(status) {
+    return status === "KREIRANO"
+      ? "#66bb6a"
+      : status === "NARUČENO"
+      ? "#ffa726"
+      : status === "ISPORUČENO"
+      ? "grey"
+      : "";
+  }
+
   function UgovoriRows(props) {
     const [open, setOpen] = React.useState(false);
     const [selected, setSelected] = React.useState(false);
     const item = props.item;
     return (
       <React.Fragment>
-        <TableRow
-          hover
+        <CustomTableRow
           sx={{
-            "&:hover": {
-              backgroundColor: "blue !important",
-            },
-            "& > *": { borderBottom: "unset" },
-            "&:last-child td, &:last-child th": { border: 0 },
-            backgroundColor:
-              item.status === "KREIRANO"
-                ? "#66bb6a"
-                : item.status === "NARUČENO"
-                ? "#ffa726"
-                : item.status === "ISPORUČENO"
-                ? "grey"
-                : "",
+            backgroundColor: delegateColors(item.status) + "!important",
           }}
         >
           <TableCell>
@@ -61,7 +68,7 @@ function UgovoriTable() {
           <TableCell align="right">{item.rok_isporuke}</TableCell>
           <TableCell align="right">{item.status}</TableCell>
           <TableCell align="right"></TableCell>
-        </TableRow>
+        </CustomTableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
