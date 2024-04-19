@@ -1,85 +1,81 @@
 import React, { useState, useEffect } from "react";
-import { CircularProgress, Paper, Container } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import {
+  CircularProgress,
+  TableBody,
+  TableCell,
+  TableRow,
+  Collapse,
+  Box,
+  Table,
+  TableHead,
+  Typography,
+  styled,
+} from "@mui/material";
+import PropTypes from "prop-types";
 
-function Artikli() {
+function ArtikliRows(props) {
   const [artikli, setArtikli] = useState(null);
-
+  const id = props.id;
   useEffect(() => {
     fetchArtikli();
   }, []);
 
   const fetchArtikli = async () => {
     try {
-      const response = await fetch("http://localhost:3002/api/artikli");
+      const response = await fetch("http://localhost:3002/api/artikli"); //+ id
       const jsonData = await response.json();
       setArtikli(jsonData);
-      console.log(jsonData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  const CustomTableCell = styled(TableCell)(({ theme }) => ({
+    borderBottom: "1px solid #9e9e9e",
+  }));
+
   return (
-    <Container maxWidth="md">
-      <Paper
-        variant="outlined"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: artikli ? "" : "25vh",
-        }}
-      >
-        {artikli ? (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Naziv</TableCell>
-                  <TableCell align="right">Dobavljač</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {artikli.map((item, index) => (
+    <React.Fragment>
+      <Collapse in={props.open} timeout="auto" unmountOnExit>
+        <Box sx={{ margin: 1 }}>
+          <Table size="small" aria-label="purchases">
+            <TableHead>
+              <Typography sx={{ fontSize: "h4.fontSize" }}>Artikli</Typography>
+              <TableRow>
+                <TableCell>Naziv</TableCell>
+                <TableCell>Dobavljač</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {artikli ? (
+                artikli.map((item, index) => (
                   <TableRow
-                    key={index}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      backgroundColor:
-                        item.status === "KREIRANO"
-                          ? "#66bb6a"
-                          : item.status === "NARUČENO"
-                          ? "#ffa726"
-                          : item.status === "ISPORUČENO"
-                          ? "grey"
-                          : "",
-                    }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
-                      {item.naziv}
-                    </TableCell>
-                    <TableCell align="right">{item.dobavljac}</TableCell>
-                    <TableCell align="right">{item.status}</TableCell>
+                    <CustomTableCell>{item.naziv}</CustomTableCell>
+                    <CustomTableCell align="left">
+                      {item.dobavljac}
+                    </CustomTableCell>
+                    <CustomTableCell align="left">
+                      {item.status}
+                    </CustomTableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <span>
-            <CircularProgress />
-          </span>
-        )}
-      </Paper>
-    </Container>
+                ))
+              ) : (
+                <CircularProgress />
+              )}
+            </TableBody>
+          </Table>
+        </Box>
+      </Collapse>
+    </React.Fragment>
   );
 }
 
-export default Artikli;
+ArtikliRows.propTypes = {
+  id: PropTypes.number.isRequired,
+  open: PropTypes.bool.isRequired,
+};
+
+export default ArtikliRows;
