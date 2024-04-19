@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { CircularProgress, Paper, Typography, Checkbox } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import {
+  CircularProgress,
+  Paper,
+  Typography,
+  Checkbox,
+  Table,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+} from "@mui/material";
 import PropTypes from "prop-types";
-import Collapse from "@mui/material/Collapse";
-import Box from "@mui/material/Box";
 import ArtikliRows from "../Artikli/artikli";
 import { styled } from "@mui/material/styles";
 
@@ -24,7 +27,7 @@ function UgovoriTable() {
       filter: "brightness(90%)",
       cursor: "pointer",
     },
-    "& > *": { borderBottom: "unset" },
+    "& > *": { borderBottom: "1" },
     "&:last-child td, &:last-child th": { border: 0 },
   }));
 
@@ -50,7 +53,6 @@ function UgovoriTable() {
 
   function UgovoriRows(props) {
     const [open, setOpen] = React.useState(false);
-    const [selected, setSelected] = React.useState(false);
     const item = props.item;
     return (
       <React.Fragment>
@@ -58,6 +60,7 @@ function UgovoriTable() {
           sx={{
             backgroundColor: delegateColors(item.status) + "!important",
           }}
+          onClick={() => setOpen(!open)}
         >
           <TableCell>
             <Checkbox size="small" color="success" />
@@ -69,27 +72,9 @@ function UgovoriTable() {
           <TableCell align="right">{item.status}</TableCell>
           <TableCell align="right"></TableCell>
         </CustomTableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <Typography sx={{ fontSize: "h4.fontSize" }}>
-                      Artikli
-                    </Typography>
-                    <TableRow>
-                      <TableCell>Naziv</TableCell>
-                      <TableCell>Dobavljač</TableCell>
-                      <TableCell align="right">Status</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <ArtikliRows id={item.id} />
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
+        <TableRow sx={{ backgroundColor: "#e0e0e0" }}>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+            <ArtikliRows id={item.id} open={open} />
           </TableCell>
         </TableRow>
       </React.Fragment>
@@ -135,7 +120,7 @@ function UgovoriTable() {
           <Table aria-label="collapsible table">
             <TableHead>
               <TableRow>
-                <TableCell colSpan={2}></TableCell>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell align="right">Kupac</TableCell>
                 <TableCell align="right">Broj ugovora</TableCell>
                 <TableCell align="right">Datum akonotacije</TableCell>
