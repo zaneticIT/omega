@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 app.use(express.urlencoded());
 const port = 3002;
 
@@ -62,16 +63,12 @@ app.get("/api/artikli", (req, res) => {
 //POST ugovori
 app.post("/api/add/ugovori", (req, res) => {
   const inputs = req.body;
-  console.log(inputs.datum_akonotacije);
   inputs.datum_akonotacije = convertDate(inputs.datum_akonotacije);
   inputs.rok_isporuke = convertDate(inputs.rok_isporuke);
-  console.log(inputs);
   const query = `INSERT INTO kupoprodajni_ugovori (kupac, broj_ugovora, datum_akonotacije, rok_isporuke, status) VALUES ('${inputs.kupac}', '${inputs.broj_ugovora}', '${inputs.datum_akonotacije}', '${inputs.rok_isporuke}', '${inputs.status}')`;
   connection.query(query, inputs, (error, results) => {
     if (error) {
-      res
-        .status(500)
-        .json({ error: "Failed to add data to the database"});
+      res.status(500).json({ error: "Failed to add data to the database" });
       return;
     }
     res.status(200).json({ message: "Data added successfully" });

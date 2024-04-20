@@ -14,6 +14,8 @@ import {
 import PropTypes from "prop-types";
 import ArtikliRows from "../Artikli/artikli";
 import { styled } from "@mui/material/styles";
+import { convertDateToCroatian } from "../functions/functions";
+import UgovoriForm from "./ugovoriForm";
 
 function UgovoriTable() {
   const [ugovori, setUgovori] = useState(null);
@@ -67,8 +69,12 @@ function UgovoriTable() {
           </TableCell>
           <TableCell align="right">{item.kupac}</TableCell>
           <TableCell align="right">{item.broj_ugovora}</TableCell>
-          <TableCell align="right">{item.datum_akonotacije}</TableCell>
-          <TableCell align="right">{item.rok_isporuke}</TableCell>
+          <TableCell align="right">
+            {convertDateToCroatian(item.datum_akonotacije)}
+          </TableCell>
+          <TableCell align="right">
+            {convertDateToCroatian(item.rok_isporuke)}
+          </TableCell>
           <TableCell align="right">{item.status}</TableCell>
           <TableCell align="right"></TableCell>
         </CustomTableRow>
@@ -140,6 +146,7 @@ function UgovoriTable() {
           </span>
         )}
       </TableContainer>
+      <UgovoriForm />
     </React.Fragment>
   );
 }
