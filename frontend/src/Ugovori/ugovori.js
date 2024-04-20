@@ -10,13 +10,25 @@ import {
   TableContainer,
   TableCell,
   TableBody,
+  Autocomplete,
+  createFilterOptions,
+  TextField,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import ArtikliRows from "../Artikli/artikli";
 import { styled } from "@mui/material/styles";
+import { convertDateToCroatian } from "../functions/functions";
+import UgovorItem from "./ugovorItem";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function UgovoriTable() {
   const [ugovori, setUgovori] = useState(null);
+  const [ugovoriList, setUgovoriList] = useState({
+    id: null,
+    kupac: "",
+    broj_ugovora: "",
+    status: "",
+  });
+  const [currId, setCurrId] = useState(0);
 
   useEffect(() => {
     fetchUgovori();
@@ -36,10 +48,25 @@ function UgovoriTable() {
       const response = await fetch("http://localhost:3002/api/ugovori");
       const jsonData = await response.json();
       setUgovori(jsonData);
+      setUgovoriList(
+        jsonData.map((item) => {
+          return {
+            id: item.id,
+            kupac: item.kupac,
+            broj_ugovora: item.broj_ugovora,
+            status: item.status,
+          };
+        })
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "any",
+    stringify: (option) => option.kupac + option.status,
+  });
 
   function delegateColors(status) {
     return status === "KREIRANO"
@@ -52,7 +79,6 @@ function UgovoriTable() {
   }
 
   function UgovoriRows(props) {
-    const [open, setOpen] = React.useState(false);
     const item = props.item;
     return (
       <React.Fragment>
@@ -60,23 +86,19 @@ function UgovoriTable() {
           sx={{
             backgroundColor: delegateColors(item.status) + "!important",
           }}
-          onClick={() => setOpen(!open)}
+          onClick={() => setCurrId(item.id)}
         >
           <TableCell>
             <Checkbox size="small" color="success" />
           </TableCell>
           <TableCell align="right">{item.kupac}</TableCell>
           <TableCell align="right">{item.broj_ugovora}</TableCell>
-          <TableCell align="right">{item.datum_akonotacije}</TableCell>
-          <TableCell align="right">{item.rok_isporuke}</TableCell>
+          <TableCell align="right">
+            {convertDateToCroatian(item.rok_isporuke)}
+          </TableCell>
           <TableCell align="right">{item.status}</TableCell>
           <TableCell align="right"></TableCell>
         </CustomTableRow>
-        <TableRow sx={{ backgroundColor: "#e0e0e0" }}>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
-            <ArtikliRows id={item.id} open={open} />
-          </TableCell>
-        </TableRow>
       </React.Fragment>
     );
   }
@@ -118,12 +140,28 @@ function UgovoriTable() {
       >
         {ugovori ? (
           <Table aria-label="collapsible table">
+            <Autocomplete
+              id="search bar"
+              options={ugovoriList.sort(
+                (a, b) => -b.status.localeCompare(a.status)
+              )}
+              groupBy={(option) => option.status}
+              filterOptions={filterOptions}
+              getOptionLabel={(option) =>
+                option.kupac + " " + option.broj_ugovora
+              }
+              sx={{ width: "300px" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Kupac/status" />
+              )}
+            />
             <TableHead>
               <TableRow>
-                <TableCell colSpan={1}></TableCell>
+                <TableCell>
+                  <DeleteIcon sx={{ my: 1, mx: 1 }} />
+                </TableCell>
                 <TableCell align="right">Kupac</TableCell>
                 <TableCell align="right">Broj ugovora</TableCell>
-                <TableCell align="right">Datum akonotacije</TableCell>
                 <TableCell align="right">Rok isporuke</TableCell>
                 <TableCell align="right">Status</TableCell>
               </TableRow>
@@ -140,6 +178,7 @@ function UgovoriTable() {
           </span>
         )}
       </TableContainer>
+      {ugovori ? <UgovorItem item={ugovori[currId-1]} /> : ""}
     </React.Fragment>
   );
 }
