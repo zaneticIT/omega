@@ -11,19 +11,6 @@ function UgovoriForm() {
     status: "KREIRANO",
   });
 
-  function InputField(props) {
-    return (
-      <Input
-        name={props.name}
-        placeholder={props.placeholder}
-        onChange={(e) => handleChange(e)}
-        defaultValue={formData[props.name]}
-        value={formData[props.name]}
-        required
-      />
-    );
-  }
-
   const postUgovori = async () => {
     try {
       const response = await fetch("http://localhost:3002/api/add/ugovori", {
@@ -43,7 +30,7 @@ function UgovoriForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [name]: value });
     console.log(formData);
   };
 
