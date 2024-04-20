@@ -30,48 +30,51 @@ export const whichInput = (value, name) => {
       return matchDatum(value).isValid;
     case "status":
       return matchStatus(value).isValid;
+    default:
+      return false;
   }
 };
 
 export const matchName = (value) => {
   const nameSanitized = validator.escape(value);
   if (
-    nameSanitized.length > 0 &&
-    validator.matches(nameSanitized, /[a-zčćžšđ\s]+$/i)
+    validator.matches(nameSanitized, /[a-zčćžšđ\s]+$/i) ||
+    nameSanitized.length() === 0
   ) {
-    return { isValid: true, name: nameSanitized };
+    return { isValid: true };
   } else {
-    return { isValid: false, name: nameSanitized };
+    return { isValid: false };
   }
 };
 
 export const matchBroj = (value) => {
   const brojSanitized = validator.escape(value);
   if (
-    brojSanitized.length > 0 &&
-    validator.matches(brojSanitized, /^([1-9]|1[0-2])\/\d{4}$/)
+    validator.matches(brojSanitized, /^([1-9]|1[0-2])\/\d{4}$/) ||
+    brojSanitized.length() === 0
   ) {
-    return { isValid: true, name: brojSanitized };
+    return { isValid: true };
   } else {
-    return { isValid: false, name: brojSanitized };
+    return { isValid: false };
   }
 };
 
 export const matchDatum = (value) => {
   if (
-    validator.isDate(value, { format: "YYYY-MM-DD", delimiters: ["/", "-"] })
+    validator.isDate(value, { format: "YYYY-MM-DD", delimiters: ["/", "-"] }) ||
+    value.length() === 0
   ) {
-    return { isValid: true, name: value };
+    return { isValid: true };
   } else {
-    return { isValid: false, name: value };
+    return { isValid: false };
   }
 };
 
 export const matchStatus = (value) => {
   const statusSanitized = validator.escape(value);
-  if (statusSanitized === "KREIRANO") {
-    return { isValid: true, name: value };
+  if (statusSanitized === "KREIRANO" || statusSanitized.length() === 0) {
+    return { isValid: true };
   } else {
-    return { isValid: false, name: value };
+    return { isValid: false };
   }
 };

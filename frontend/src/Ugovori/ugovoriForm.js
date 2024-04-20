@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import { Button, Grid, Input } from "@mui/material";
-import {
-  convertDateToCroatian,
-  convertDateToGeneral,
-  getCurrentYear,
-} from "../functions/functions";
-import validator from "validator";
-import * as DOMPurify from "dompurify";
+import { Button, Grid } from "@mui/material";
+import { convertDateToGeneral } from "../functions/functions";
 import UgovoriInputs from "./UgovoriInputs";
 
 function UgovoriForm() {
