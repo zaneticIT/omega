@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Button, Grid, Input } from "@mui/material";
-import { convertDateToGeneral } from "../functions/functions";
+import {
+  convertDateToCroatian,
+  convertDateToGeneral,
+  getCurrentYear,
+} from "../functions/functions";
+import validator from "validator";
+import * as DOMPurify from "dompurify";
+import UgovoriInputs from "./UgovoriInputs";
 
 function UgovoriForm() {
   const [formData, setFormData] = useState({
@@ -10,6 +17,21 @@ function UgovoriForm() {
     rok_isporuke: convertDateToGeneral(new Date()),
     status: "KREIRANO",
   });
+  const [validInputs, setValidInputs] = useState({
+    kupac: true,
+    broj_ugovora: true,
+    datum_akonotacije: true,
+    rok_isporuke: true,
+    status: true,
+  });
+
+  const placeholders = [
+    "Ivan Horvat",
+    "1/2024",
+    convertDateToGeneral(new Date()),
+    convertDateToGeneral(new Date()),
+    "KREIRANO",
+  ];
 
   const postUgovori = async () => {
     try {
@@ -23,58 +45,32 @@ function UgovoriForm() {
     } catch (e) {}
   };
 
-  function handleSubmit(e) {
+  //^([1-9]|1[0-2])\/\d{4}$
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     postUgovori();
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    console.log(formData);
   };
 
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit}>
         <Grid container justifyContent="space-between">
-          <Grid item xs={1}></Grid>
-          <Grid item>
-            <Input
-              name="kupac"
-              placeholder="Kupac"
-              onChange={(e) => handleChange(e)}
-            />
-          </Grid>
-          <Grid item>
-            <Input
-              name="broj_ugovora"
-              placeholder="Broj ugovora"
-              onChange={(e) => handleChange(e)}
-            />
-          </Grid>
-          <Grid item>
-            <Input
-              name="datum_akonotacije"
-              placeholder="Datum Akonotacije"
-              onChange={(e) => handleChange(e)}
-            />
-          </Grid>
-          <Grid item>
-            <Input
-              name="rok_isporuke"
-              placeholder="Rok isporuke"
-              onChange={(e) => handleChange(e)}
-            />
-          </Grid>
-          <Grid item>
-            <Input
-              name="status"
-              placeholder="Status"
-              onChange={(e) => handleChange(e)}
-            />
-          </Grid>
-          <Grid item>
+          <Grid item xs={1.5}></Grid>
+          {Object.keys(formData).map((item, index) => (
+            <Grid item xs={1.5}>
+              <UgovoriInputs
+                formData={formData}
+                setFormData={setFormData}
+                validInputs={validInputs}
+                setValidInputs={setValidInputs}
+                key={index}
+                name={item}
+                placeholder={placeholders[index]}
+              />
+            </Grid>
+          ))}
+          <Grid item xs={1}>
             <Button onClick={handleSubmit}>Dodaj</Button>
           </Grid>
           <Grid item xs={1}></Grid>
