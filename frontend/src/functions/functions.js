@@ -39,7 +39,7 @@ export const matchName = (value) => {
   const nameSanitized = validator.escape(value);
   if (
     validator.matches(nameSanitized, /[a-zčćžšđ\s]+$/i) ||
-    nameSanitized.length() === 0
+    nameSanitized.length === 0
   ) {
     return { isValid: true };
   } else {
@@ -51,7 +51,7 @@ export const matchBroj = (value) => {
   const brojSanitized = validator.escape(value);
   if (
     validator.matches(brojSanitized, /^([1-9]|1[0-2])\/\d{4}$/) ||
-    brojSanitized.length() === 0
+    brojSanitized.length === 0
   ) {
     return { isValid: true };
   } else {
@@ -62,7 +62,7 @@ export const matchBroj = (value) => {
 export const matchDatum = (value) => {
   if (
     validator.isDate(value, { format: "YYYY-MM-DD", delimiters: ["/", "-"] }) ||
-    value.length() === 0
+    value.length === 0
   ) {
     return { isValid: true };
   } else {
@@ -72,7 +72,7 @@ export const matchDatum = (value) => {
 
 export const matchStatus = (value) => {
   const statusSanitized = validator.escape(value);
-  if (statusSanitized === "KREIRANO" || statusSanitized.length() === 0) {
+  if (statusSanitized === "KREIRANO" || statusSanitized.length === 0) {
     return { isValid: true };
   } else {
     return { isValid: false };
