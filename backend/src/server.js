@@ -47,9 +47,35 @@ app.get("/api/ugovori", (req, res) => {
   });
 });
 
+//GET id ugovor
+app.get("/api/ugovor/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  connection.query("SELECT * FROM kupoprodajni_ugovori WHERE id = " + id, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 //GET all artikli
 app.get("/api/artikli", (req, res) => {
   connection.query("SELECT * FROM artikli", (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+//GET id artikl
+app.get("/api/artikl/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  connection.query("SELECT * FROM artikli WHERE ugovor_id = " + id, (error, results) => {
     if (error) {
       console.error("Error executing query:", error);
       res.status(500).json({ error: "Internal server error" });

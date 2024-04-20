@@ -17,12 +17,12 @@ function ArtikliRows(props) {
   const [artikli, setArtikli] = useState(null);
   const id = props.id;
   useEffect(() => {
-    fetchArtikli();
-  }, []);
+    fetchArtikl();
+  }, [id]);
 
-  const fetchArtikli = async () => {
+  const fetchArtikl = async () => {
     try {
-      const response = await fetch("http://localhost:3002/api/artikli"); //+ id
+      const response = await fetch("http://localhost:3002/api/artikl/" + id);
       const jsonData = await response.json();
       setArtikli(jsonData);
     } catch (error) {

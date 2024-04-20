@@ -15,10 +15,10 @@ import {
   TextField,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import ArtikliRows from "../Artikli/artikli";
 import { styled } from "@mui/material/styles";
 import { convertDateToCroatian } from "../functions/functions";
-import UgovoriForm from "./ugovoriForm";
+import UgovorItem from "./ugovorItem";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function UgovoriTable() {
   const [ugovori, setUgovori] = useState(null);
@@ -28,6 +28,7 @@ function UgovoriTable() {
     broj_ugovora: "",
     status: "",
   });
+  const [currId, setCurrId] = useState(0);
 
   useEffect(() => {
     fetchUgovori();
@@ -78,7 +79,6 @@ function UgovoriTable() {
   }
 
   function UgovoriRows(props) {
-    const [open, setOpen] = React.useState(false);
     const item = props.item;
     return (
       <React.Fragment>
@@ -86,7 +86,7 @@ function UgovoriTable() {
           sx={{
             backgroundColor: delegateColors(item.status) + "!important",
           }}
-          onClick={() => setOpen(!open)}
+          onClick={() => setCurrId(item.id)}
         >
           <TableCell>
             <Checkbox size="small" color="success" />
@@ -99,11 +99,6 @@ function UgovoriTable() {
           <TableCell align="right">{item.status}</TableCell>
           <TableCell align="right"></TableCell>
         </CustomTableRow>
-        <TableRow sx={{ backgroundColor: "#e0e0e0" }}>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
-            <ArtikliRows id={item.id} open={open} />
-          </TableCell>
-        </TableRow>
       </React.Fragment>
     );
   }
@@ -145,30 +140,30 @@ function UgovoriTable() {
       >
         {ugovori ? (
           <Table aria-label="collapsible table">
+            <Autocomplete
+              id="search bar"
+              options={ugovoriList.sort(
+                (a, b) => -b.status.localeCompare(a.status)
+              )}
+              groupBy={(option) => option.status}
+              filterOptions={filterOptions}
+              getOptionLabel={(option) =>
+                option.kupac + " " + option.broj_ugovora
+              }
+              sx={{ width: "300px" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Kupac/status" />
+              )}
+            />
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Autocomplete
-                    id="search bar"
-                    options={ugovoriList.sort(
-                      (a, b) => -b.status.localeCompare(a.status)
-                    )}
-                    groupBy={(option) => option.status}
-                    filterOptions={filterOptions}
-                    getOptionLabel={(option) =>
-                      option.kupac + " " + option.broj_ugovora
-                    }
-                    sx={{ width: 200 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Kupac/status" />
-                    )}
-                  />
+                  <DeleteIcon sx={{ my: 1, mx: 1 }} />
                 </TableCell>
                 <TableCell align="right">Kupac</TableCell>
                 <TableCell align="right">Broj ugovora</TableCell>
                 <TableCell align="right">Rok isporuke</TableCell>
                 <TableCell align="right">Status</TableCell>
-                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -183,7 +178,7 @@ function UgovoriTable() {
           </span>
         )}
       </TableContainer>
-      <UgovoriForm />
+      {ugovori ? <UgovorItem item={ugovori[currId-1]} /> : ""}
     </React.Fragment>
   );
 }
