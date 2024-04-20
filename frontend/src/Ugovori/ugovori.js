@@ -10,6 +10,9 @@ import {
   TableContainer,
   TableCell,
   TableBody,
+  Autocomplete,
+  createFilterOptions,
+  TextField,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import ArtikliRows from "../Artikli/artikli";
@@ -19,6 +22,12 @@ import UgovoriForm from "./ugovoriForm";
 
 function UgovoriTable() {
   const [ugovori, setUgovori] = useState(null);
+  const [ugovoriList, setUgovoriList] = useState({
+    id: null,
+    kupac: "",
+    broj_ugovora: "",
+    status: "",
+  });
 
   useEffect(() => {
     fetchUgovori();
@@ -38,10 +47,25 @@ function UgovoriTable() {
       const response = await fetch("http://localhost:3002/api/ugovori");
       const jsonData = await response.json();
       setUgovori(jsonData);
+      setUgovoriList(
+        jsonData.map((item) => {
+          return {
+            id: item.id,
+            kupac: item.kupac,
+            broj_ugovora: item.broj_ugovora,
+            status: item.status,
+          };
+        })
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "any",
+    stringify: (option) => option.kupac + option.status,
+  });
 
   function delegateColors(status) {
     return status === "KREIRANO"
@@ -69,9 +93,6 @@ function UgovoriTable() {
           </TableCell>
           <TableCell align="right">{item.kupac}</TableCell>
           <TableCell align="right">{item.broj_ugovora}</TableCell>
-          <TableCell align="right">
-            {convertDateToCroatian(item.datum_akonotacije)}
-          </TableCell>
           <TableCell align="right">
             {convertDateToCroatian(item.rok_isporuke)}
           </TableCell>
@@ -126,12 +147,28 @@ function UgovoriTable() {
           <Table aria-label="collapsible table">
             <TableHead>
               <TableRow>
-                <TableCell colSpan={1}></TableCell>
+                <TableCell>
+                  <Autocomplete
+                    id="search bar"
+                    options={ugovoriList.sort(
+                      (a, b) => -b.status.localeCompare(a.status)
+                    )}
+                    groupBy={(option) => option.status}
+                    filterOptions={filterOptions}
+                    getOptionLabel={(option) =>
+                      option.kupac + " " + option.broj_ugovora
+                    }
+                    sx={{ width: 200 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Kupac/status" />
+                    )}
+                  />
+                </TableCell>
                 <TableCell align="right">Kupac</TableCell>
                 <TableCell align="right">Broj ugovora</TableCell>
-                <TableCell align="right">Datum akonotacije</TableCell>
                 <TableCell align="right">Rok isporuke</TableCell>
                 <TableCell align="right">Status</TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
