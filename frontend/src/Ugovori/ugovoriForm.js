@@ -52,17 +52,15 @@ function UgovoriForm() {
         <Grid container justifyContent="space-between">
           <Grid item xs={1.5}></Grid>
           {Object.keys(formData).map((item, index) => (
-            <Grid item xs={1.5}>
-              <UgovoriInputs
-                formData={formData}
-                setFormData={setFormData}
-                validInputs={validInputs}
-                setValidInputs={setValidInputs}
-                key={index}
-                name={item}
-                placeholder={placeholders[index]}
-              />
-            </Grid>
+            <UgovoriInputs
+              formData={formData}
+              setFormData={setFormData}
+              validInputs={validInputs}
+              setValidInputs={setValidInputs}
+              key={index}
+              name={item}
+              placeholder={placeholders[index]}
+            />
           ))}
           <Grid item xs={1}>
             <Button onClick={handleSubmit}>Dodaj</Button>

@@ -29,9 +29,9 @@ function UgovoriInputs(props) {
     doTheChange(e);
   };
 
-  return (
+  return name === "status" ? null : (
     <React.Fragment>
-      <Grid item>
+      <Grid item xs={1.5}>
         <Input
           sx={{ backgroundColor: valid ? "" : "#ef9a9a" }}
           required
