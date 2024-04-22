@@ -13,7 +13,7 @@ import {
 import PropTypes from "prop-types";
 import ArtikliRows from "../Artikli/artikli";
 import { styled } from "@mui/material/styles";
-import { convertDateToCroatian } from "../functions/functions";
+import { convertDateToCroatian, deleteUgovor } from "../functions/functions";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function UgovorItem(props) {
@@ -47,10 +47,14 @@ function UgovorItem(props) {
           sx={{
             backgroundColor: delegateColors(item.status) + "!important",
           }}
-          onClick={() => {}}
         >
           <TableCell>
-            <DeleteIcon color="error" />
+            <DeleteIcon
+              color="error"
+              onClick={() => {
+                deleteUgovor(item.id);
+              }}
+            />
           </TableCell>
           <TableCell align="right">{item.kupac}</TableCell>
           <TableCell align="right">{item.broj_ugovora}</TableCell>
