@@ -27,13 +27,15 @@ function UgovoriForm() {
     status: "KREIRANO",
   });
 
-  const placeholders = [
+  const placeholdersUgovori = [
     "Ivan Horvat",
     "1/2024",
     convertDateToGeneral(new Date()),
     convertDateToGeneral(new Date()),
     "KREIRANO",
   ];
+
+  const placeholdersArtikli = ["#", "Naziv artikla", "Dobavljač", "KREIRANO"];
 
   const postUgovori = async () => {
     try {
@@ -82,7 +84,7 @@ function UgovoriForm() {
               setValidInputs={setValidInputs}
               key={index}
               name={item}
-              placeholder={placeholders[index]}
+              placeholder={placeholdersUgovori[index]}
             />
           ))}
           <Grid item xs={1}>
@@ -104,7 +106,7 @@ function UgovoriForm() {
               setValidInputs={setValidInputs}
               key={index}
               name={item}
-              placeholder={placeholders[index]}
+              placeholder={placeholdersArtikli[index]}
             />
           ))}
           <Grid item xs={1}>
