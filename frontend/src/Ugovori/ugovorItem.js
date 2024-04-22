@@ -15,6 +15,7 @@ import ArtikliRows from "../Artikli/artikli";
 import { styled } from "@mui/material/styles";
 import { convertDateToCroatian, deleteUgovor } from "../functions/functions";
 import DeleteIcon from "@mui/icons-material/Delete";
+import UgovoriForm from "./ugovoriForm";
 
 function UgovorItem(props) {
   const id = props.item;
@@ -91,6 +92,7 @@ function UgovorItem(props) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          mt: 5,
         }}
       >
         Kupoprodajni ugovor {id.broj_ugovora}
@@ -123,7 +125,9 @@ function UgovorItem(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box>f</Box>
+      <Box>
+        <UgovoriForm />
+      </Box>
     </React.Fragment>
   );
 }

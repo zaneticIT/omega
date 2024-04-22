@@ -121,6 +121,7 @@ function UgovoriTable() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          mt: 5,
         }}
       >
         Kupoprodajni ugovori

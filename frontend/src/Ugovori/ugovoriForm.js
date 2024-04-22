@@ -1,22 +1,30 @@
 import React, { useState } from "react";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { convertDateToGeneral } from "../functions/functions";
 import UgovoriInputs from "./UgovoriInputs";
 
 function UgovoriForm() {
-  const [formData, setFormData] = useState({
+  const [ugovoriFormData, setUgovoriFormData] = useState({
     kupac: "Ivan Horvat",
     broj_ugovora: "1/2024",
     datum_akonotacije: convertDateToGeneral(new Date()),
     rok_isporuke: convertDateToGeneral(new Date()),
     status: "KREIRANO",
   });
+
   const [validInputs, setValidInputs] = useState({
     kupac: true,
     broj_ugovora: true,
     datum_akonotacije: true,
     rok_isporuke: true,
     status: true,
+  });
+
+  const [artikliFormData, setArtikliFormData] = useState({
+    ugovor_id: "#",
+    naziv: "Naziv",
+    dobavljac: "Dobavljač",
+    status: "KREIRANO",
   });
 
   const placeholders = [
@@ -34,7 +42,7 @@ function UgovoriForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(ugovoriFormData),
       });
     } catch (e) {}
   };
@@ -49,12 +57,27 @@ function UgovoriForm() {
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit}>
-        <Grid container justifyContent="space-between">
+        <Typography
+          sx={{
+            fontSize: "h4.fontSize",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 5,
+          }}
+        >
+          Dodaj ugovor
+        </Typography>
+        <Grid
+          container
+          justifyContent="space-evenly"
+          sx={{ m: "auto", backgroundColor: "#e0e0e0", width: "50vw" }}
+        >
           <Grid item xs={1.5}></Grid>
-          {Object.keys(formData).map((item, index) => (
+          {Object.keys(ugovoriFormData).map((item, index) => (
             <UgovoriInputs
-              formData={formData}
-              setFormData={setFormData}
+              formData={ugovoriFormData}
+              setFormData={setUgovoriFormData}
               validInputs={validInputs}
               setValidInputs={setValidInputs}
               key={index}
@@ -65,7 +88,29 @@ function UgovoriForm() {
           <Grid item xs={1}>
             <Button onClick={handleSubmit}>Dodaj</Button>
           </Grid>
-          <Grid item xs={1}></Grid>
+          <Grid item xs={1.5}></Grid>
+        </Grid>
+        <Grid
+          container
+          justifyContent="space-evenly"
+          sx={{ m: "auto", backgroundColor: "#e0e0e0", width: "50vw" }}
+        >
+          <Grid item xs={1.5}></Grid>
+          {Object.keys(artikliFormData).map((item, index) => (
+            <UgovoriInputs
+              formData={artikliFormData}
+              setFormData={setArtikliFormData}
+              validInputs={validInputs}
+              setValidInputs={setValidInputs}
+              key={index}
+              name={item}
+              placeholder={placeholders[index]}
+            />
+          ))}
+          <Grid item xs={1}>
+            <Button onClick={handleSubmit}>Dodaj</Button>
+          </Grid>
+          <Grid item xs={1.5}></Grid>
         </Grid>
       </form>
     </React.Fragment>
