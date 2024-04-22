@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 function UgovorItem(props) {
   const id = props.item;
-  console.log(props);
 
   const CustomTableRow = styled(TableRow)(({ theme }) => ({
     "&:hover": {

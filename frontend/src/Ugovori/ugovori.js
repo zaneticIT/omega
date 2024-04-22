@@ -28,7 +28,7 @@ function UgovoriTable() {
     broj_ugovora: "",
     status: "",
   });
-  const [currId, setCurrId] = useState(0);
+  const [currId, setCurrId] = useState(1);
 
   useEffect(() => {
     fetchUgovori();
