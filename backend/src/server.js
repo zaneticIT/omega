@@ -50,14 +50,17 @@ app.get("/api/ugovori", (req, res) => {
 //GET id ugovor
 app.get("/api/ugovor/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  connection.query("SELECT * FROM kupoprodajni_ugovori WHERE id = " + id, (error, results) => {
-    if (error) {
-      console.error("Error executing query:", error);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+  connection.query(
+    "SELECT * FROM kupoprodajni_ugovori WHERE id = " + id,
+    (error, results) => {
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal server error" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 //GET all artikli
@@ -75,14 +78,17 @@ app.get("/api/artikli", (req, res) => {
 //GET id artikl
 app.get("/api/artikl/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  connection.query("SELECT * FROM artikli WHERE ugovor_id = " + id, (error, results) => {
-    if (error) {
-      console.error("Error executing query:", error);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+  connection.query(
+    "SELECT * FROM artikli WHERE ugovor_id = " + id,
+    (error, results) => {
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal server error" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 //POST ugovori
@@ -97,6 +103,19 @@ app.post("/api/add/ugovori", (req, res) => {
       return;
     }
     res.status(200).json({ message: "Data added successfully" });
+  });
+});
+
+//DELETE ugovori
+app.delete("/api/remove/ugovor/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const query = `DELETE FROM kupoprodajni_ugovori WHERE id = ` + id;
+  connection.query(query, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.status(200).json({ message: "Data removed successfully" });
   });
 });
 

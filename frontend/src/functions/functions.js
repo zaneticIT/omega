@@ -78,3 +78,16 @@ export const matchStatus = (value) => {
     return { isValid: false };
   }
 };
+
+export const deleteUgovor = async (id) => {
+  try {
+    const response = await fetch(
+      "http://localhost:3002/api/remove/ugovor/" + id,
+      { method: "DELETE" }
+    );
+    const jsonData = await response.json();
+    console.log(jsonData);
+  } catch (error) {
+    console.error("Error fetching data:" + error);
+  }
+};
