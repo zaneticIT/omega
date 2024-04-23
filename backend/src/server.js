@@ -1,4 +1,5 @@
 // server.js
+// TODO - API endpoint for login, register, adding/removing in bulk, uploading files if needed(scans or copies)
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");

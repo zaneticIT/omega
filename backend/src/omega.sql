@@ -53,3 +53,5 @@ select * from kupoprodajni_ugovori;
 select * from artikli where ugovor_id = 1;
 /*
 DELETE FROM kupoprodajni_ugovori WHERE id = 1;
+
+//TODO - transactions with prepared statements, normalized databases, appropriate tables and tablenames for everything

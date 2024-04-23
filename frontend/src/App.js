@@ -4,6 +4,7 @@ function App() {
   return (
     <div>
       <Ugovori />
+      //TODO - security, login, register, hosting
     </div>
   );
 }

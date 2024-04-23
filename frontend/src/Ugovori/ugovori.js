@@ -1,3 +1,4 @@
+//TODO - organize and optimize everything
 import React, { useState, useEffect } from "react";
 import {
   CircularProgress,
@@ -179,7 +180,9 @@ function UgovoriTable() {
           </span>
         )}
       </TableContainer>
-      {ugovori ? <UgovorItem item={ugovori[currId-1]} /> : ""}
+      {ugovori ? <UgovorItem item={ugovori[currId - 1]} /> : ""} {/*TODO - fix
+      this, "Klikom na kupoprodajni ugovor potrebno je otvoriti stranicu na
+      kojoj se prikazuju detalji kupoprodajnog ugovora."*/}
     </React.Fragment>
   );
 }
