@@ -106,6 +106,21 @@ app.post("/api/add/ugovori", (req, res) => {
   });
 });
 
+//POST ugovori
+app.post("/api/add/artikli", (req, res) => {
+  const inputs = req.body;
+  const query = `INSERT INTO artikli (ugovor_id, naziv, dobavljac, status)
+  VALUES
+      (last_insert_id(), ${inputs.naziv}, ${dobavljac}, 'KREIRANO');`;
+  connection.query(query, inputs, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: "Failed to add data to the database" });
+      return;
+    }
+    res.status(200).json({ message: "Data added successfully" });
+  });
+});
+
 //DELETE ugovori
 app.delete("/api/remove/ugovor/:id", (req, res) => {
   const id = parseInt(req.params.id);

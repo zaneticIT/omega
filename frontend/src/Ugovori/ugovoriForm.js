@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography, Alert } from "@mui/material";
 import { convertDateToGeneral } from "../functions/functions";
 import UgovoriInputs from "./UgovoriInputs";
 
@@ -12,11 +12,18 @@ function UgovoriForm() {
     status: "KREIRANO",
   });
 
-  const [validInputs, setValidInputs] = useState({
+  const [validUgovoriInputs, setValidUgovoriInputs] = useState({
     kupac: true,
     broj_ugovora: true,
     datum_akonotacije: true,
     rok_isporuke: true,
+    status: true,
+  });
+
+  const [validArtikliInputs, setValidArtikliInputs] = useState({
+    ugovor_id: true,
+    naziv: true,
+    dobavljac: true,
     status: true,
   });
 
@@ -46,14 +53,27 @@ function UgovoriForm() {
         },
         body: JSON.stringify(ugovoriFormData),
       });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const postArtikli = async () => {
+    try {
+      const response = await fetch("http://localhost:3002/api/add/artikli", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(artikliFormData),
+      });
     } catch (e) {}
   };
 
-  //^([1-9]|1[0-2])\/\d{4}$
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    postUgovori();
+    if (postUgovori()) postArtikli();
   };
 
   return (
@@ -80,8 +100,8 @@ function UgovoriForm() {
             <UgovoriInputs
               formData={ugovoriFormData}
               setFormData={setUgovoriFormData}
-              validInputs={validInputs}
-              setValidInputs={setValidInputs}
+              validInputs={validUgovoriInputs}
+              setValidInputs={setValidUgovoriInputs}
               key={index}
               name={item}
               placeholder={placeholdersUgovori[index]}
@@ -95,24 +115,21 @@ function UgovoriForm() {
         <Grid
           container
           justifyContent="space-evenly"
-          sx={{ m: "auto", backgroundColor: "#e0e0e0", width: "50vw" }}
+          sx={{ m: "auto", backgroundColor: "#e0e0e0", width: "50vw", pb: 1 }}
         >
-          <Grid item xs={1.5}></Grid>
+          <Grid item xs={2}></Grid>
           {Object.keys(artikliFormData).map((item, index) => (
             <UgovoriInputs
               formData={artikliFormData}
               setFormData={setArtikliFormData}
-              validInputs={validInputs}
-              setValidInputs={setValidInputs}
+              validInputs={validArtikliInputs}
+              setValidInputs={setValidArtikliInputs}
               key={index}
               name={item}
               placeholder={placeholdersArtikli[index]}
             />
           ))}
-          <Grid item xs={1}>
-            <Button onClick={handleSubmit}>Dodaj</Button>
-          </Grid>
-          <Grid item xs={1.5}></Grid>
+          <Grid item xs={4}></Grid>
         </Grid>
       </form>
     </React.Fragment>
